@@ -3,6 +3,7 @@ import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
 import nlp
+import st_helpers
 
 if 'documents' not in st.session_state:
     st.session_state['documents'] = []
@@ -38,9 +39,12 @@ st.markdown("""
     Experiment by using certain words repeatedly across different documents and seeing how this impacts the tf-idf.
 """)
 
-document = st.text_input('Create a document:')
+document = st.text_input('Add a document:')
 
-st.session_state['documents'].append(document)
+st.write('##### Documents')
+
+if document != '':
+    st.session_state['documents'].append(document)
 
 st.write(st.session_state['documents'])
 
@@ -62,16 +66,18 @@ with st.echo():
     tfidf = TfidfModel(corpus)
 
     tfidf_results = pd.DataFrame(columns=['token', 'document', 'tfidf'])
-    for document in corpus:
+    for idx, document in enumerate(corpus):
         token_weights = tfidf[document]
         for token_weight in token_weights:
-            tfidf_results.loc[len(tfidf_results.index)] = [token_weight[0], document, token_weight[1]]
+            tfidf_results.loc[len(tfidf_results.index)] = [
+                dictionary[token_weight[0]],
+                documents[idx],
+                token_weight[1]
+            ]
 
-st.write(dictionary.token2id)
+tfidf_results["tfidf"] = pd.to_numeric(tfidf_results["tfidf"])
 
-st.write(dictionary.id2token.get(1))
-
-st.write(tfidf_results)
+st.dataframe(st_helpers.filter_dataframe(tfidf_results))
 
     
 
