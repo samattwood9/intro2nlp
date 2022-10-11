@@ -9,9 +9,9 @@ text = st.text_area("Enter some example text:", "BBC News is an operational busi
 with st.echo():
     import spacy
     from spacy import displacy
-    import en_core_web_sm
+    #import en_core_web_sm
 
-    nlp = en_core_web_sm.load() #spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
     doc = nlp(text)
 
     colors = {"ORG": "#8dd3c7", "PERSON": "#ffffb3", "DATE": "#bebada", "GPE": "#fb8072", "MONEY": "#80b1d3"}
